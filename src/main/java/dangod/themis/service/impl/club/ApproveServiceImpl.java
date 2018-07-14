@@ -2,9 +2,11 @@ package dangod.themis.service.impl.club;
 
 import dangod.themis.dao.club.ApplicationRepo;
 import dangod.themis.dao.club.ApprovalRepo;
+import dangod.themis.dao.club.ClubRepo;
 import dangod.themis.dao.common.UserBaseInfoRepo;
 import dangod.themis.model.po.club.Application;
 import dangod.themis.model.po.club.Approval;
+import dangod.themis.model.po.club.Club;
 import dangod.themis.model.po.club.ClubRole;
 import dangod.themis.model.vo.club.ApprovalVo;
 import dangod.themis.service.club.ApplicationService;
@@ -35,6 +37,8 @@ public class ApproveServiceImpl implements ApproveService {
     @Autowired
     private UserBaseInfoRepo userBaseInfoRepo;
     @Autowired
+    private ClubRepo clubRepo;
+    @Autowired
     private MailService mailService;
     @Override
     public List<ApprovalVo> getApprovalVoListById(long applicationId) {
@@ -57,6 +61,14 @@ public class ApproveServiceImpl implements ApproveService {
             //如果条件 为 app.getLv() != role.getLv() 就是不允许跨级审批
             Approval approvalDO = approvalRepo.findByApplication_IdAndAndApprovalLV(app.getId(), role.getLv());
             if (app.getLv() > role.getLv() || app.getStatus() != 1 || approvalDO != null) throw new Exception("当前等级已经审批过或者审批流程结束");
+
+            //判断钱是否足够
+            /*
+            Club club=clubRepo.findByBaseInfo_User_Id(userId);
+            if (app.getSelfMoney()>club.getSelfMoney()||app.getReserveMoney()>club.getReserveMoney())
+                throw new Exception("当前社团资金不足");
+            */
+
             Approval approval = new Approval(role.getLv(), result, comment, userBaseInfoRepo.findByUser_Id(userId), app);
             approvalRepo.save(approval);
             app.setLv(role.getLv() + 1);

@@ -1,10 +1,13 @@
 TODO
 如果审核通过
 application is_apply_refund --> 0
-插入approval
+控制钱
+显示金额=实际金额
+
 
 如果审核未通过
 application is_apply_refund --> 1
+
 插入approval
 
 判断lv是否>=5
