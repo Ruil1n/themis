@@ -1,0 +1,12 @@
+TODO
+如果审核通过
+application is_apply_refund --> 0
+插入approval
+
+如果审核未通过
+application is_apply_refund --> 1
+插入approval
+
+判断lv是否>=5
+    是：
+        status --> 0 审核完成
