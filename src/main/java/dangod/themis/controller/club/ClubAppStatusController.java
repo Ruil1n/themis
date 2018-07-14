@@ -30,7 +30,7 @@ public class ClubAppStatusController extends BaseController{
     @Autowired
     private ApplicationService applicationService;
     @RequestMapping(value = "/self", method = GET)
-    @ApiOperation(value = "获取自己社团所有申请表情况(status -1 0 1)")
+    @ApiOperation(value = "获取自己社团所有申请表情况(status -1 0 1 2)")
     @Authorization
     @Club
     public String getSelfStatuses(HttpServletRequest request, HttpServletResponse response,
@@ -53,7 +53,7 @@ public class ClubAppStatusController extends BaseController{
         return Result.send(SUCCESS, statuses, CLUB_STATUS_SUCCESS_MESSAGE);
     }
     @RequestMapping(value = "/clubId", method = GET)
-    @ApiOperation(value = "获取指定社团所有申请表情况(status -1 0 1)")
+    @ApiOperation(value = "获取指定社团所有申请表情况(status -1 0 1 2)")
     @Authorization
     @ClubAdmin
     public String getStatusesByClubId(HttpServletRequest request, HttpServletResponse response,

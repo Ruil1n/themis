@@ -156,7 +156,13 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public List<StatusVo> getAllCanSeePageStatus(ClubRole clubRole, Integer page, Integer size) {
         List<StatusVo> statusVoList = new ArrayList<>();
-        if (clubRole.getLv() >= 2) {
+        if (clubRole.getLv() == 2){
+            List<Application> applicationList = applicationRepo.findByIsApplyRefundOrLvEquals(1, clubRole.getLv(),new PageRequest(page, size, new Sort(Sort.Direction.DESC, "id")));
+            for (Application a : applicationList) {
+                statusVoList.add(new StatusVo(a));
+            }
+        }
+        if (clubRole.getLv() > 2) {
             List<Application> applicationList = applicationRepo.findByLvGreaterThanEqual(clubRole.getLv(), new PageRequest(page, size, new Sort(Sort.Direction.DESC, "id")));
             for (Application a : applicationList) {
                 statusVoList.add(new StatusVo(a));
@@ -168,6 +174,19 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public List<StatusVo> getAllCanSeePageStatus(ClubRole clubRole, Integer status, Integer page, Integer size) {
         List<StatusVo> statusVoList = new ArrayList<>();
+        if (clubRole.getLv() == 2){
+            if (status==2) {
+                List<Application> applicationList = applicationRepo.findByIsApplyRefundOrLvEqualsAndStatus(1, clubRole.getLv(), status, new PageRequest(page, size, new Sort(Sort.Direction.DESC, "id")));
+                for (Application a : applicationList) {
+                    statusVoList.add(new StatusVo(a));
+                }
+            }else{
+                List<Application> applicationList = applicationRepo.findByLvGreaterThanEqualAndStatus(clubRole.getLv(), status, new PageRequest(page, size, new Sort(Sort.Direction.DESC, "id")));
+                for (Application a : applicationList) {
+                    statusVoList.add(new StatusVo(a));
+                }
+            }
+        }
         if (clubRole.getLv() > 2) {
             List<Application> applicationList = applicationRepo.findByLvGreaterThanEqualAndStatus(clubRole.getLv(), status, new PageRequest(page, size, new Sort(Sort.Direction.DESC, "id")));
             for (Application a : applicationList) {

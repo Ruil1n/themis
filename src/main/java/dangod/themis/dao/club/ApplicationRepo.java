@@ -22,6 +22,8 @@ public interface ApplicationRepo extends JpaRepository<Application, Long>{
 
     List<Application> findByIsApplyRefundOrLvEquals(Integer isApplyRefund,Integer lv, Pageable pageable);
 
+    List<Application> findByIsApplyRefundOrLvEqualsAndStatus(Integer isApplyRefund,Integer lv,Integer status, Pageable pageable);
+
     List<Application> findAllByLvEquals(Integer lv, Pageable pageable);
 
     Page<Application> findAllByStatus(Integer status, Pageable pageable);

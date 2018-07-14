@@ -35,7 +35,7 @@ public interface ApplicationService {
     /**
      * 按照status获取自己社团申请情况
      * @param clubId
-     * @param status -1:未通过 0:通过 1:审核中
+     * @param status -1:未通过 0:通过 1:审核中 2:核账中
      * @param page
      * @param size
      * @return
