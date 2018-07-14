@@ -63,6 +63,8 @@ public class StatusVo {
                 this.status = "审核通过";break;
             case 1:
                 this.status = "审核中";break;
+            case 2:
+                this.status = "核账中";break;
             default:
                 this.status = "审核中";
         }
@@ -84,6 +86,8 @@ public class StatusVo {
                 this.status = "审核通过";break;
             case 1:
                 this.status = "审核中";break;
+            case 2:
+                this.status = "核账中";break;
             default:
                 this.status = "审核中";
         }
@@ -102,6 +106,8 @@ public class StatusVo {
                 this.status = "审核通过";break;
             case 1:
                 this.status = "审核中";break;
+            case 2:
+                this.status = "核账中";break;
             default:
                 this.status = "审核中";
         }

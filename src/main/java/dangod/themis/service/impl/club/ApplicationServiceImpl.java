@@ -112,7 +112,7 @@ public class ApplicationServiceImpl implements ApplicationService {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒 E ");
             application.setRefundDate(sdf.format(Calendar.getInstance().getTime()));
             application.setIsApplyRefund(1);
-            application.setStatus(1);
+            application.setStatus(2);
             applicationRepo.saveAndFlush(application);
         } catch (Exception e) {
             e.printStackTrace();
