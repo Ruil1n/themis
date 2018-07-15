@@ -22,6 +22,16 @@ public interface ApproveService {
      */
     ApprovalVo approve(long applicationId, long userId, Integer result, String comment);//用role 确定审批等级
 
+    /**
+     * 核销表单
+     * @param applicationId
+     * @param userId
+     * @param is_apply_refund 1同意 0不同意
+     * @param comment
+     * @return
+     */
+    ApprovalVo apprefund(long applicationId, long userId, Integer is_apply_refund, double realselfmoney,double realreservemoney,String comment);//核销
+
     Integer getApprovalLv(long userId);
 
     Integer deleteApprovalByAppId(long appId);

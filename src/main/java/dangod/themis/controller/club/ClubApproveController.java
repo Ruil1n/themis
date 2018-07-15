@@ -45,6 +45,22 @@ public class ClubApproveController extends BaseController{
         return Result.send(SUCCESS, approvalVo, CLUB_APPROVE_SUCCESS_MESSAGE);
     }
 
+    @RequestMapping(value = "/refund",method = POST)
+    @ApiOperation(value = "审核核销")
+    @Authorization
+    @ContainAuthority(CLUB_ACTIVITY_APPROVE)
+    public String apprefund(HttpServletRequest request, HttpServletResponse response,
+                            @RequestHeader(AUTHORIZATION)String token,
+                            @RequestParam("appId") long appId,
+                            @RequestParam("result") Integer result,
+                            @RequestParam("realselfmoney") double realselfmoney,
+                            @RequestParam("realreservemoney") double realreservemoney,
+                            @RequestParam("comment") String comment){
+        ApprovalVo approvalVo = approveService.apprefund(appId, getUserId(request), result,realselfmoney,realreservemoney,comment);
+        if(approvalVo == null)return Result.send(FAIL, approvalVo, CLUB_APPROVE_FAIL_MESSAGE);
+        return Result.send(SUCCESS, approvalVo, CLUB_APPROVE_SUCCESS_MESSAGE);
+    }
+
     @RequestMapping(value = "/lv", method = GET)
     @ApiOperation(value = "获取审批等级")
     @Authorization
