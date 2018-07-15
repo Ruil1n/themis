@@ -9,10 +9,7 @@ import dangod.themis.model.po.club.Approval;
 import dangod.themis.model.po.club.Club;
 import dangod.themis.model.po.club.ClubRole;
 import dangod.themis.model.vo.club.ApprovalVo;
-import dangod.themis.service.club.ApplicationService;
-import dangod.themis.service.club.ApproveService;
-import dangod.themis.service.club.MailService;
-import dangod.themis.service.club.RoleService;
+import dangod.themis.service.club.*;
 import dangod.themis.service.common.UserInfoService;
 import dangod.themis.service.common.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +34,7 @@ public class ApproveServiceImpl implements ApproveService {
     @Autowired
     private UserBaseInfoRepo userBaseInfoRepo;
     @Autowired
-    private ClubRepo clubRepo;
+    private ClubService clubService;
     @Autowired
     private MailService mailService;
     @Override
@@ -78,6 +75,12 @@ public class ApproveServiceImpl implements ApproveService {
             }
             if(result == 1&&app.getLv() == 5) {//指导老师审批且同意 审批通过
                 app.setStatus(0);
+                //在这个位置扣钱 也就是全部通过后
+                Club club=clubService.getClubByuserId(userId);
+                Integer flag=clubService.updateMoney(club.getId(),app.getSelfMoney(),app.getReserveMoney());
+                if (flag!=0)
+                    throw new Exception("扣款失败");
+
             }
             approvalVo = new ApprovalVo(approval);
             applicationRepo.save(app);

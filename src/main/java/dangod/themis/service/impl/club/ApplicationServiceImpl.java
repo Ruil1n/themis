@@ -104,9 +104,15 @@ public class ApplicationServiceImpl implements ApplicationService {
         try {
             Application application = applicationRepo.findOne(applicationId);
             if (application.getClub().getId() != club.getId()) {
-                System.out.println("退款的不是自己的社团活动");
+                System.out.println("核账的不是自己的社团活动");
                 return -1;
             }
+            //判断当前是否已经审批完毕
+            if (application.getStatus()!=0) {
+                System.out.println("当前未审批结束");
+                return -1;
+            }
+
             application.setRealSelfMoney(realSelfMoney);
             application.setRealReserveMoney(realReserveMone);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒 E ");

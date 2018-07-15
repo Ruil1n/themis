@@ -54,7 +54,7 @@ public interface ApplicationService {
     /**
      * 获取审批等级高于等于自己的申请(自己需要审批和自己审批过的)
      * @param clubRole
-     * @param status 指定搜索状态 -1:未通过 0:通过 1:审核中
+     * @param status 指定搜索状态 -1:未通过 0:通过 1:审核中 2:核账中
      * @param page
      * @param size
      * @return

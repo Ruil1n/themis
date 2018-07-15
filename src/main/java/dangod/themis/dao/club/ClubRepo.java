@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClubRepo extends JpaRepository<Club, Long>{
     Club findByBaseInfo_User_Id(long userId);
+    Club findById(long clubId);
 }
