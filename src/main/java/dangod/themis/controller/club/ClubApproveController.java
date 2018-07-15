@@ -49,7 +49,7 @@ public class ClubApproveController extends BaseController{
     @RequestMapping(value = "/lv", method = GET)
     @ApiOperation(value = "获取审批等级")
     @Authorization
-    @ContainAuthority(CLUB_ACTIVITY_APPROVE)
+    //@ContainAuthority(CLUB_ACTIVITY_APPROVE)
     public String getLv(HttpServletRequest request, HttpServletResponse response,
                                   @RequestHeader(AUTHORIZATION)String token){
         int lv = approveService.getApprovalLv(getUserId(request));

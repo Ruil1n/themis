@@ -103,6 +103,10 @@ public class ApplicationServiceImpl implements ApplicationService {
     public Integer applyRefund(Club club,long applicationId, Double realSelfMoney, Double realReserveMone) {
         try {
             Application application = applicationRepo.findOne(applicationId);
+            if (application.getIsApplyRefund()!=0){
+                System.out.println("无法提交核账申请");
+                return -1;
+            }
             if (application.getClub().getId() != club.getId()) {
                 System.out.println("核账的不是自己的社团活动");
                 return -1;

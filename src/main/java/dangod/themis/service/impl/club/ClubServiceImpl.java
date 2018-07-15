@@ -26,7 +26,7 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     public Club getClubByuserId(long userId) {
-        return clubRepo.findByBaseInfo_User_Id(userId);
+        return null;
     }
 
     @Override

@@ -36,6 +36,8 @@ public class ApproveServiceImpl implements ApproveService {
     @Autowired
     private ClubService clubService;
     @Autowired
+    private ClubRepo clubRepo;
+    @Autowired
     private MailService mailService;
     @Override
     public List<ApprovalVo> getApprovalVoListById(long applicationId) {
@@ -76,10 +78,13 @@ public class ApproveServiceImpl implements ApproveService {
             if(result == 1&&app.getLv() == 5) {//指导老师审批且同意 审批通过
                 app.setStatus(0);
                 //在这个位置扣钱 也就是全部通过后
-                Club club=clubService.getClubByuserId(userId);
-                Integer flag=clubService.updateMoney(club.getId(),app.getSelfMoney(),app.getReserveMoney());
-                if (flag!=0)
-                    throw new Exception("扣款失败");
+                Club club=clubRepo.findByBaseInfo_User_Id(app.getClub().getId());
+                club.setSelfMoney(club.getSelfMoney()-app.getSelfMoney());
+                club.setReserveMoney(club.getReserveMoney()-app.getReserveMoney());
+                clubRepo.save(club);
+//                Integer flag=clubService.updateMoney(club.getId(),app.getSelfMoney(),app.getReserveMoney());
+//                if (flag!=0)
+//                    throw new Exception("扣款失败");
 
             }
             approvalVo = new ApprovalVo(approval);
@@ -132,10 +137,10 @@ public class ApproveServiceImpl implements ApproveService {
             ClubRole role = roleService.getRole(userId);
             if (role.getLv() < 2) throw new Exception("没有权限");
             Application app = applicationRepo.findOne(applicationId);
-            if (app.getIsApplyRefund()!=0) throw new Exception("无法提交核账申请");
+            //if (app.getIsApplyRefund()!=0) throw new Exception("无法提交核账申请");
             //userId是否为社团对应的 id
             //app.getClub().getId();
-            Club club = clubService.getClubByuserId(userId);//clubRepo.findByBaseInfo_User_Id(app.getClub().getId()); //对应 club_club 中的社团 id
+            Club club = clubRepo.findByBaseInfo_User_Id(app.getClub().getId()); //对应 club_club 中的社团 id
             Approval approval = new Approval(5,result, comment, userBaseInfoRepo.findByUser_Id(userId), app);
             approvalRepo.save(approval);
 
@@ -152,12 +157,11 @@ public class ApproveServiceImpl implements ApproveService {
                 app.setIsApplyRefund(2);//核账完成 不能再核账
                 club.setReserveMoney(club.getReserveMoney()+(app.getReserveMoney()-app.getRealReserveMoney()));
                 club.setSelfMoney(club.getSelfMoney()+(app.getSelfMoney()-app.getRealSelfMoney()));  //减去实际消费的资金
-                clubService.updateMoney(club.getId(),club.getSelfMoney(),club.getReserveMoney());
             }
             approvalVo = new ApprovalVo(approval);
             applicationRepo.save(app);
 
-            //clubRepo.save(club);
+            clubRepo.save(club);
             //TODO 邮件发送 考虑邮件error 数据库回滚问题
 
         }catch (Exception e){
