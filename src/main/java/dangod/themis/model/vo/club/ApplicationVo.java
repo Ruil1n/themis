@@ -23,7 +23,10 @@ public class ApplicationVo {
     private String activitypeople;
     private String selfMoney;
     private String reserveMoney;
+    private String realSelfMoney;
+    private String realReserveMoney;
     private Integer isFine;
+    private Integer isApplyRefund;
     private String introduce;
     private Integer hasFile;
     private String status;
@@ -118,6 +121,23 @@ public class ApplicationVo {
         this.activitypeople = activitypeople;
     }
 
+
+    public String getRealSelfMoney() {
+        return realSelfMoney;
+    }
+
+    public void setRealSelfMoney(Double realSelfMoney) {
+        this.realSelfMoney = String.format("%.2f", realSelfMoney);
+    }
+
+    public String getRealReserveMoney() {
+        return realReserveMoney;
+    }
+
+    public void setRealReserveMoney(Double realReserveMoney) {
+        this.realReserveMoney = String.format("%.2f", realReserveMoney);
+    }
+
     public String getSelfMoney() {
         return selfMoney;
     }
@@ -131,7 +151,8 @@ public class ApplicationVo {
     }
 
     public void setReserveMoney(Double reserveMoney) {
-        this.reserveMoney = String.format("%.2f", reserveMoney);;
+        this.reserveMoney = String.format("%.2f", reserveMoney);
+        ;
     }
 
     public Integer getLv() {
@@ -148,6 +169,14 @@ public class ApplicationVo {
 
     public void setIsFine(Integer isFine) {
         this.isFine = isFine;
+    }
+
+    public Integer getIsApplyRefund() {
+        return isApplyRefund;
+    }
+
+    public void setIsApplyRefund(Integer isApplyRefund) {
+        this.isApplyRefund = isApplyRefund;
     }
 
     public String getIntroduce() {
@@ -171,11 +200,13 @@ public class ApplicationVo {
     }
 
     public void setStatus(Integer status) {
-        switch (status){
+        switch (status) {
             case -1:
-                this.status = "审核未通过";break;
+                this.status = "审核未通过";
+                break;
             case 0:
-                this.status = "审核通过";break;
+                this.status = "审核通过";
+                break;
             default:
                 this.status = "审核中";
         }
@@ -204,23 +235,29 @@ public class ApplicationVo {
         this.activityStart = application.getActivityStart();
         this.activityEnd = application.getActivityEnd();
         this.activitypeople = application.getActivitypeople();
+        this.realSelfMoney = String.format("%.2f", application.getRealSelfMoney());
+        this.realReserveMoney = String.format("%.2f", application.getRealReserveMoney());
         this.selfMoney = String.format("%.2f", application.getSelfMoney());
         this.reserveMoney = String.format("%.2f", application.getReserveMoney());
+        this.isApplyRefund = application.getIsApplyRefund();
         this.isFine = application.getIsFine();
         this.introduce = application.getIntroduce();
         this.hasFile = application.getHasFile();
         this.lv = application.getLv();
-        switch (application.getStatus()){
+        switch (application.getStatus()) {
             case -1:
-                this.status = "审核未通过";break;
+                this.status = "审核未通过";
+                break;
             case 0:
-                this.status = "审核通过";break;
+                this.status = "审核通过";
+                break;
             default:
                 this.status = "审核中";
         }
         this.results = new ArrayList<>();
     }
-    public ApplicationVo(Application application, List<ApprovalVo> results){
+
+    public ApplicationVo(Application application, List<ApprovalVo> results) {
         this.applicationId = application.getId();
         this.applyDate = application.getApplyDate();
         this.clubName = application.getClub().getClubName();
@@ -232,24 +269,29 @@ public class ApplicationVo {
         this.activityStart = application.getActivityStart();
         this.activityEnd = application.getActivityEnd();
         this.activitypeople = application.getActivitypeople();
+        this.realSelfMoney = String.format("%.2f", application.getRealSelfMoney());
+        this.realReserveMoney = String.format("%.2f", application.getRealReserveMoney());
         this.selfMoney = String.format("%.2f", application.getSelfMoney());
         this.reserveMoney = String.format("%.2f", application.getReserveMoney());
         this.isFine = application.getIsFine();
+        this.isApplyRefund = application.getIsApplyRefund();
         this.introduce = application.getIntroduce();
         this.hasFile = application.getHasFile();
         this.lv = application.getLv();
-        switch (application.getStatus()){
+        switch (application.getStatus()) {
             case -1:
-                this.status = "审核未通过";break;
+                this.status = "审核未通过";
+                break;
             case 0:
-                this.status = "审核通过";break;
+                this.status = "审核通过";
+                break;
             default:
                 this.status = "审核中";
         }
         this.results = results;
     }
 
-    public ApplicationVo(long applicationId, String applyDate, String clubName, long chiefId, String chiefName, String chiefPhone, String activityName, String activityPlace, String activityStart, String activityEnd, String activitypeople, Double selfMoney, Double reserveMoney, Integer isFine, String introduce, Integer hasFile, String status) {
+    public ApplicationVo(long applicationId, String applyDate, String clubName, long chiefId, String chiefName, String chiefPhone, String activityName, String activityPlace, String activityStart, String activityEnd, String activitypeople, Double selfMoney, Double reserveMoney, Double realSelfMoney, Double realReserveMoney, Integer isFine, Integer isApplyRefund, String introduce, Integer hasFile, String status) {
         this.applicationId = applicationId;
         this.applyDate = applyDate;
         this.clubName = clubName;
@@ -261,9 +303,12 @@ public class ApplicationVo {
         this.activityStart = activityStart;
         this.activityEnd = activityEnd;
         this.activitypeople = activitypeople;
+        this.realSelfMoney = String.format("%.2f", realSelfMoney);
+        this.realReserveMoney = String.format("%.2f", realReserveMoney);
         this.selfMoney = String.format("%.2f", selfMoney);
         this.reserveMoney = String.format("%.2f", reserveMoney);
         this.isFine = isFine;
+        this.isApplyRefund = isApplyRefund;
         this.introduce = introduce;
         this.hasFile = hasFile;
         this.status = status;

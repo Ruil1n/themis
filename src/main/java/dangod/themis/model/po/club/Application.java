@@ -25,7 +25,7 @@ public class Application {
     private Double reserveMoney;
     private Double realReserveMoney;
     private Integer isFine;
-    private Integer isApplyRefund;//0未提交退款申请 1提交了退款申请
+    private Integer isApplyRefund;//0未提交退款申请 1提交了退款申请 2不能再提交申请
     @Column(length = 1500)
     private String introduce;
     private Integer hasFile;// 0无 1有

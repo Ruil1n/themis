@@ -82,10 +82,11 @@ public class ApproveServiceImpl implements ApproveService {
                 club.setSelfMoney(club.getSelfMoney()-app.getSelfMoney());
                 club.setReserveMoney(club.getReserveMoney()-app.getReserveMoney());
                 clubRepo.save(club);
-//                Integer flag=clubService.updateMoney(club.getId(),app.getSelfMoney(),app.getReserveMoney());
-//                if (flag!=0)
-//                    throw new Exception("扣款失败");
-
+                /*
+                Integer flag=clubService.updateMoney(club.getId(),app.getSelfMoney(),app.getReserveMoney());
+                if (flag!=0)
+                    throw new Exception("扣款失败");
+                */
             }
             approvalVo = new ApprovalVo(approval);
             applicationRepo.save(app);
@@ -148,9 +149,6 @@ public class ApproveServiceImpl implements ApproveService {
                 //app.setStatus(-1);
                 //app.setLv(100);
                 app.setIsApplyRefund(0);//退款状态结束
-
-                //club.setReserveMoney(club.getReserveMoney()-app.getReserveMoney());
-                //club.setSelfMoney(club.getSelfMoney()-app.getSelfMoney());  //减去申请时的金额
             }
             if(result == 1) {//财务同意 核销通过
                 app.setStatus(0);
