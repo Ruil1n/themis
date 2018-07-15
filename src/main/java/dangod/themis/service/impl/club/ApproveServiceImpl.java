@@ -30,6 +30,8 @@ public class ApproveServiceImpl implements ApproveService {
     @Autowired
     private ApplicationRepo applicationRepo;
     @Autowired
+    private ClubRepo clubRepo;
+    @Autowired
     private RoleService roleService;
     @Autowired
     private UserBaseInfoRepo userBaseInfoRepo;
@@ -75,12 +77,7 @@ public class ApproveServiceImpl implements ApproveService {
             }
             if(result == 1&&app.getLv() == 5) {//指导老师审批且同意 审批通过
                 app.setStatus(0);
-                //在这个位置扣钱 也就是全部通过后
-                Club club=clubService.getClubByuserId(userId);
-                Integer flag=clubService.updateMoney(club.getId(),app.getSelfMoney(),app.getReserveMoney());
-                if (flag!=0)
-                    throw new Exception("扣款失败");
-
+                // 核销后一次性扣完，因为社团经费可以为负...
             }
             approvalVo = new ApprovalVo(approval);
             applicationRepo.save(app);
@@ -113,6 +110,49 @@ public class ApproveServiceImpl implements ApproveService {
                     e.printStackTrace();
                 }
             }
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+            return null;
+        }
+        return approvalVo;
+    }
+
+    /**
+     * 核销
+     **/
+    @Override
+    @Transactional
+    public ApprovalVo apprefund(long applicationId, long userId, Integer result, double realselfmoney, double realreservemoney,String comment) {
+        ApprovalVo approvalVo;
+        try {
+            ClubRole role = roleService.getRole(userId);
+            if (role.getLv() < 2) throw new Exception("没有权限");
+            Application app = applicationRepo.findOne(applicationId);
+            //userId是否为社团对应的 id
+            app.getClub().getId();
+            Club club = clubRepo.findByBaseInfo_User_Id(app.getClub().getId()); //对应 club_club 中的社团 id
+            Approval approval = new Approval(role.getLv(),result, comment, userBaseInfoRepo.findByUser_Id(userId), app);
+            approvalRepo.save(approval);
+            if(result == 0) {//0：不同意
+                app.setStatus(-1);
+                app.setLv(100);
+                app.setIsApplyRefund(3);//退款状态 失败 is_apply_refund = 3
+                club.setReserveMoney(club.getReserveMoney()-app.getReserveMoney());
+                club.setSelfMoney(club.getSelfMoney()-app.getSelfMoney());  //减去申请时的金额
+            }
+            if(result == 1) {//财务同意 核销通过
+                app.setStatus(0);
+                app.setIsApplyRefund(2);//退款状态 成功 is_apply_refund = 2
+                System.out.println("+++"+realreservemoney+"+"+userId+""+app.getClub()+"+"+app.getClub().getId());
+                club.setReserveMoney(club.getReserveMoney()-realreservemoney);
+                club.setSelfMoney(club.getSelfMoney()-realselfmoney);  //减去实际消费的资金
+            }
+            approvalVo = new ApprovalVo(approval);
+            applicationRepo.save(app);
+            clubRepo.save(club);
+            //TODO 邮件发送 考虑邮件error 数据库回滚问题
+
         }catch (Exception e){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             e.printStackTrace();

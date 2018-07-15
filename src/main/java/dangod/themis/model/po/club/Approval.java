@@ -13,6 +13,7 @@ public class Approval {
     @Column(name = "approval_lv")
     private Integer approvalLV;//1 2 3 4
     private Integer result;// 同意1 不同意0
+    private Integer is_apply_refund;// 同意1 不同意0
     @Column(length = 1000)
     private String comment;
     @OneToOne(fetch= FetchType.EAGER, cascade= CascadeType.DETACH)
@@ -45,6 +46,10 @@ public class Approval {
     public void setResult(Integer result) {
         this.result = result;
     }
+
+    public Integer getIs_apply_refund() {return is_apply_refund;}
+
+    public void setIs_apply_refund(Integer is_apply_refund) {this.is_apply_refund = is_apply_refund;}
 
     public String getComment() {
         return comment;
