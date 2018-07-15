@@ -121,6 +121,55 @@ public class ApproveServiceImpl implements ApproveService {
         return approvalVo;
     }
 
+    /**
+     * 核销
+     **/
+    @Override
+    @Transactional
+    public ApprovalVo apprefund(long applicationId, long userId, Integer result,String comment) {
+        ApprovalVo approvalVo;
+        try {
+            ClubRole role = roleService.getRole(userId);
+            if (role.getLv() < 2) throw new Exception("没有权限");
+            Application app = applicationRepo.findOne(applicationId);
+            if (app.getIsApplyRefund()!=0) throw new Exception("无法提交核账申请");
+            //userId是否为社团对应的 id
+            //app.getClub().getId();
+            Club club = clubService.getClubByuserId(userId);//clubRepo.findByBaseInfo_User_Id(app.getClub().getId()); //对应 club_club 中的社团 id
+            Approval approval = new Approval(5,result, comment, userBaseInfoRepo.findByUser_Id(userId), app);
+            approvalRepo.save(approval);
+
+            if(result == 0) {//0：不同意
+                //app.setStatus(-1);
+                //app.setLv(100);
+                app.setIsApplyRefund(0);//退款状态结束
+
+                //club.setReserveMoney(club.getReserveMoney()-app.getReserveMoney());
+                //club.setSelfMoney(club.getSelfMoney()-app.getSelfMoney());  //减去申请时的金额
+            }
+            if(result == 1) {//财务同意 核销通过
+                app.setStatus(0);
+                app.setIsApplyRefund(2);//核账完成 不能再核账
+                club.setReserveMoney(club.getReserveMoney()+(app.getReserveMoney()-app.getRealReserveMoney()));
+                club.setSelfMoney(club.getSelfMoney()+(app.getSelfMoney()-app.getRealSelfMoney()));  //减去实际消费的资金
+                clubService.updateMoney(club.getId(),club.getSelfMoney(),club.getReserveMoney());
+            }
+            approvalVo = new ApprovalVo(approval);
+            applicationRepo.save(app);
+
+            //clubRepo.save(club);
+            //TODO 邮件发送 考虑邮件error 数据库回滚问题
+
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+            return null;
+        }
+        return approvalVo;
+    }
+
+
+
     @Override
     public Integer getApprovalLv(long userId) {
         int lv = -1;
