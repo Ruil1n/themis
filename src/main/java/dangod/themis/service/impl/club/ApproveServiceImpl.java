@@ -133,6 +133,12 @@ public class ApproveServiceImpl implements ApproveService {
     }
 
     @Override
+    public Integer getApprovalRefund(long applicationId) {
+        Application application = applicationRepo.findOne(applicationId);
+        return application.getIsApplyRefund();
+    }
+
+    @Override
     public Integer deleteApprovalByAppId(long appId) {
         int status = 0;
         try {

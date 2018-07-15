@@ -24,5 +24,7 @@ public interface ApproveService {
 
     Integer getApprovalLv(long userId);
 
+    Integer getApprovalRefund(long applicationId);
+
     Integer deleteApprovalByAppId(long appId);
 }

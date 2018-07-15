@@ -21,6 +21,7 @@ import static dangod.themis.controller.base.constant.Message.*;
 import static dangod.themis.controller.base.constant.Status.FAIL;
 import static dangod.themis.controller.base.constant.Status.PERMISSIN_DENIED;
 import static dangod.themis.controller.base.constant.Status.SUCCESS;
+import static dangod.themis.model.po.authority.constant.TypeContant.CLUB_ACTIVITY_APPLY;
 import static dangod.themis.model.po.authority.constant.TypeContant.CLUB_ACTIVITY_APPROVE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -49,10 +50,26 @@ public class ClubApproveController extends BaseController{
     @ApiOperation(value = "获取审批等级")
     @Authorization
     @ContainAuthority(CLUB_ACTIVITY_APPROVE)
-    public String getlv(HttpServletRequest request, HttpServletResponse response,
+    public String getLv(HttpServletRequest request, HttpServletResponse response,
                                   @RequestHeader(AUTHORIZATION)String token){
         int lv = approveService.getApprovalLv(getUserId(request));
+        System.out.println(lv);
         if(lv == -1)return Result.send(PERMISSIN_DENIED, lv, CLUB_APPROVE_NO_AUTHORITY_MESSAGE);
         return Result.send(SUCCESS, lv, CLUB_APPROVE_HAVE_AUTHORITY_MESSAGE);
     }
+
+    @RequestMapping(value = "/refund", method = GET)
+    @ApiOperation(value = "获取是否核账")
+    @Authorization
+    @ContainAuthority(CLUB_ACTIVITY_APPROVE)
+    public String getRefund(HttpServletRequest request, HttpServletResponse response,
+                            @RequestHeader(AUTHORIZATION)String token,
+                            @RequestParam("appId") long appId){
+        int refund = approveService.getApprovalRefund(appId);
+        if(refund != 1)return Result.send(PERMISSIN_DENIED, refund, CLUB_APPROVE_NO_AUTHORITY_MESSAGE);
+        return Result.send(SUCCESS, refund, CLUB_APPROVE_HAVE_AUTHORITY_MESSAGE);
+    }
+
+
+
 }
