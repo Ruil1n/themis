@@ -35,7 +35,10 @@ public class UserController extends BaseController{
                            @RequestParam("password")String password,
                            @RequestParam("realName")String realName,
                            @RequestParam("email")String email,
-                           @RequestParam("sex")String sex){
+                           @RequestParam("sex")String sex,
+                           @RequestParam("key")String key){
+        if (!"beta.house".equals(key))
+            return Result.send(FAIL, null, REGISTER_FAIL_MESSAGE);
         Integer status = userService.addUser(username, password, realName, email, sex);
         if(status != null)
             return Result.send(FAIL, null, REGISTER_FAIL_MESSAGE);

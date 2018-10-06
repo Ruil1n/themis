@@ -41,10 +41,11 @@ public class UserServiceImpl implements UserService {
     }
 
     private Integer addUserBaseInfo(String realName, String email, String sex, User user) {
-        UserBaseInfo baseInfo = baseInfoRepo.saveAndFlush((new UserBaseInfo(realName, email, sex, user)));
+        UserBaseInfo baseInfo = baseInfoRepo.saveAndFlush((new UserBaseInfo(realName, email, sex, null,user)));
         //添加全部权限
         //权限见model.po.authority.constant
-        AuthorityUser authorityUser=new AuthorityUser(user,"[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]");
+        //添加学生权限
+        AuthorityUser authorityUser=new AuthorityUser(user,"[6]");
         authorityUserRepo.saveAndFlush(authorityUser);
 
         if(baseInfo == null)return -1;
@@ -67,20 +68,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserBaseInfo addAndCheckUser(String username, String password, String realName, String email, String sex) {
+    public UserBaseInfo addAndCheckUser(String username, String password, String realName, String email, String sex,String phone) {
         if (userRepo.countByUsername(username) != 0)
             return null;
         User user = new User(username, password);
         userRepo.saveAndFlush(user);
-        UserBaseInfo baseInfo = addAndCheckUserBaseInfo(realName, email, sex, user);
+        UserBaseInfo baseInfo = addAndCheckUserBaseInfo(realName, email, sex, phone,user);
         if(baseInfo != null)return baseInfo;
         return null;
     }
 
-    private UserBaseInfo addAndCheckUserBaseInfo(String realName, String email, String sex, User user) {
-        UserBaseInfo baseInfo = baseInfoRepo.saveAndFlush(new UserBaseInfo(realName, email, sex, user));
+    private UserBaseInfo addAndCheckUserBaseInfo(String realName, String email, String sex,String phone, User user) {
+        UserBaseInfo baseInfo = baseInfoRepo.saveAndFlush(new UserBaseInfo(realName, email, sex, phone,user));
         if(baseInfo == null)return null;
         return baseInfo;
     }
+
+
 
 }

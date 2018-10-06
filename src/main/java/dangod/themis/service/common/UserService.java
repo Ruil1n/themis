@@ -42,6 +42,6 @@ public interface UserService {
      * @param sex
      * @return
      */
-    UserBaseInfo addAndCheckUser(String username, String password, String realName, String email, String sex);
+    UserBaseInfo addAndCheckUser(String username, String password, String realName, String email,String sex,String phone);
 
 }

@@ -33,12 +33,12 @@ public class ThemisApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		//userService.addUser("ruilin","ruilin","17905535","ruilin@qq.com","1");  //注册测试
+		userService.addUser("ruilin","ruilin","17905535","ruilin@qq.com","1");  //注册测试
 		//权限见model.po.authority.constant
 		//添加用户名与注册相同
-		User user=userService.getUserById((long) 3);
-		AuthorityUser authorityUser=new AuthorityUser(user,"[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]");
-		authorityUserRepo.saveAndFlush(authorityUser);
+//		User user=userService.getUserById((long) 3);
+//		AuthorityUser authorityUser=new AuthorityUser(user,"[22,23,24,25]");
+//		authorityUserRepo.saveAndFlush(authorityUser);
 
 		//userService.checkUser("ruilin","ruilin"); //登陆测试
 	}

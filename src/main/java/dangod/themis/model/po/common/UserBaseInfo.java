@@ -68,10 +68,11 @@ public class UserBaseInfo implements Serializable {
     public UserBaseInfo() {
     }
 
-    public UserBaseInfo(String realName, String email, String sex, User user) {
+    public UserBaseInfo(String realName, String email, String sex, String phone,User user) {
         this.realName = realName;
         this.email = email;
         this.sex = sex;
         this.user = user;
+        this.phone=phone;
     }
 }

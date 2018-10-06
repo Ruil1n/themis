@@ -5,7 +5,9 @@ import dangod.themis.controller.base.annotation.Authorization;
 import dangod.themis.controller.base.annotation.ContainAuthority;
 import dangod.themis.core.result.Result;
 import dangod.themis.core.util.BaseFile;
+import dangod.themis.model.po.club.Club;
 import dangod.themis.model.vo.score.file.result.ImportResult;
+import dangod.themis.service.club.ClubService;
 import dangod.themis.service.score.StudentBaseInfoService;
 import dangod.themis.service.score.StudentRecordService;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +36,8 @@ public class DBController extends BaseController{
     private StudentBaseInfoService studentBaseInfoService;
     @Autowired
     private StudentRecordService studentRecordService;
+    @Autowired
+    private ClubService clubService;
 
     @RequestMapping(value = "/base/file",method = POST)
     @ApiOperation(value = "数据库管理员添加学生信息")
@@ -42,7 +46,9 @@ public class DBController extends BaseController{
     public String addStudentByFile(HttpServletRequest request, HttpServletResponse response,
                                    @RequestHeader(AUTHORIZATION)String token,
                                    @RequestParam("file") MultipartFile file){
-        ImportResult result = studentBaseInfoService.addStudentBaseByFile(file, getRealName(request));
+        //TEST:暂时改成社团负责人上传接口
+        //ImportResult result = studentBaseInfoService.addStudentBaseByFile(file, getRealName(request));
+        ImportResult result = clubService.addClubManagerByFile(file, getRealName(request));
         if(result == null)
             return Result.send(FAIL, null, STU_DB_FAIL_MESSAGE);
         return Result.send(SUCCESS, result.getFailMessage(), String.format(STU_DB_SUCCESS_MESSAGE, result.getSuccessNum(), result.getFailNum()));

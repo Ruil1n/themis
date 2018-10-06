@@ -78,7 +78,7 @@ public class ApproveServiceImpl implements ApproveService {
             if(result == 1&&app.getLv() == 5) {//指导老师审批且同意 审批通过
                 app.setStatus(0);
                 //在这个位置扣钱 也就是全部通过后
-                Club club=clubRepo.findByBaseInfo_User_Id(app.getClub().getId());
+                Club club=clubRepo.findById(app.getClub().getId());
                 club.setSelfMoney(club.getSelfMoney()-app.getSelfMoney());
                 club.setReserveMoney(club.getReserveMoney()-app.getReserveMoney());
                 clubRepo.save(club);

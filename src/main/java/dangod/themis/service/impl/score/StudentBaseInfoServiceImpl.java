@@ -226,7 +226,7 @@ public class StudentBaseInfoServiceImpl implements StudentBaseInfoService {
                 List<String> failAdd = new ArrayList<>();
                 for (int i = 1; i <= row; i++) {
                     BaseImport importVo = new BaseImport(hssf.getRowValue(0, i, 8));
-                    UserBaseInfo baseInfo = userService.addAndCheckUser(importVo.getStuId(), MD5Util.MD5(importVo.getStuId().substring(importVo.getStuId().length() - 4)), importVo.getRealName(), importVo.getEmail(), importVo.getSex());
+                    UserBaseInfo baseInfo = userService.addAndCheckUser(importVo.getStuId(), MD5Util.MD5(importVo.getStuId().substring(importVo.getStuId().length() - 4)), importVo.getRealName(), importVo.getEmail(), importVo.getSex(),null);
                     if (baseInfo != null) {
                         stuBasePoList.add(new StudentBaseInfo(importVo.getStuId(), null, importVo.getEntranceTime(), importVo.getPolitical(), baseInfo, classService.getClassById(importVo.getClassId()), dormitoryService.getDormitoryById(importVo.getDormitoryId())));
                         stuBaseAuthList.add(new AuthorityUser(baseInfo.getUser(), STU_BASE_AUTH));
