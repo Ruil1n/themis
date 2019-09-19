@@ -244,6 +244,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         return statusVoList;
     }
 
+    @Transactional
     @Override
     public Integer deleteApplication(Club club, long applicationId) {
         Application app = applicationRepo.findOne(applicationId);
